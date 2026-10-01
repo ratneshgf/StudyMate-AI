@@ -1,0 +1,9 @@
+Django>=5.0,<6.0
+Pillow
+opencv-python-headless
+pytesseract
+requests
+python-dotenv
+psycopg2-binary
+reportlab
+gunicorn

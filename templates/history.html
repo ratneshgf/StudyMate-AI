@@ -1,0 +1,8 @@
+{% extends "base.html" %}{% block title %}History - StudyMate{% endblock %}
+{% block content %}
+<section class="wrap narrow wide"><h1 class="h2">Your study history</h1>
+{% for m in items %}
+<div class="card row between item"><a href="{% url 'result' m.pk %}"><b>{{ m.topic }}</b><br><span class="muted">{{ m.get_source_type_display }} input, {{ m.updated_at|date:"j M Y" }}</span></a>
+<form method="post" action="{% url 'delete' m.pk %}" onsubmit="return confirm('Delete this study material?')">{% csrf_token %}<button class="icon" aria-label="Delete {{ m.topic }}"><svg class="ic"><use href="#i-bin"/></svg></button></form></div>
+{% empty %}<p class="muted">No saved material yet. <a href="{% url 'dashboard' %}">Generate your first topic</a>.</p>{% endfor %}
+</section>{% endblock %}

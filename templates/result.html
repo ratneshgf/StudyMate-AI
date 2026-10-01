@@ -1,0 +1,31 @@
+{% extends "base.html" %}{% block title %}{{ m.topic }} - StudyMate{% endblock %}
+{% block content %}
+<section class="wrap result">
+  <h1 class="h1">{{ m.topic }}</h1>
+  <div class="row actions">
+    <form method="post" action="{% url 'save' m.pk %}">{% csrf_token %}<button class="btn sm {% if m.saved %}on{% endif %}"><svg class="ic"><use href="#i-pin"/></svg>{% if m.saved %}Saved{% else %}Save{% endif %}</button></form>
+    <a class="btn sm ghost" href="{% url 'download' m.pk 'pdf' %}"><svg class="ic"><use href="#i-down"/></svg>PDF</a>
+    <a class="btn sm ghost" href="{% url 'download' m.pk 'txt' %}"><svg class="ic"><use href="#i-down"/></svg>TXT</a>
+    <form method="post" action="{% url 'regenerate' m.pk %}" class="row regen" data-busy>{% csrf_token %}
+      <svg class="ic"><use href="#i-redo"/></svg>
+      <button class="chip" name="mode" value="fresh">New set</button><button class="chip" name="mode" value="shorter">Shorter</button>
+      <button class="chip" name="mode" value="detailed">More detail</button><button class="chip" name="mode" value="easier">Easier</button></form>
+  </div>
+  <nav class="jump" aria-label="Sections"><a class="c-blue" href="#notes">Short notes</a><a class="c-orange" href="#exam">Exam questions</a><a class="c-lime" href="#viva">Viva questions</a></nav>
+
+  <article class="panel blue" id="notes"><header><h2>Short notes</h2><button class="icon" data-copy="notes" aria-label="Copy short notes"><svg class="ic"><use href="#i-copy"/></svg></button></header>
+    <div id="c-notes"><p class="def">{{ m.notes.definition }}</p>
+    <ul class="pts">{% for p in m.notes.key_points %}<li>{{ p }}</li>{% endfor %}</ul>
+    <p class="tags">{% for c in m.notes.important_concepts %}<span>{{ c }}</span>{% endfor %}</p></div></article>
+
+  <article class="panel orange" id="exam"><header><h2>Exam questions and answers</h2><button class="icon" data-copy="exam" aria-label="Copy exam answers"><svg class="ic"><use href="#i-copy"/></svg></button></header>
+    <div id="c-exam">{% for marks, qs in groups %}<h3>{{ marks }} mark{{ marks|pluralize }}</h3>
+    {% for q in qs %}<details><summary>{{ q.question }}</summary><p>{{ q.answer }}</p></details>{% endfor %}{% endfor %}</div></article>
+
+  <article class="panel lime" id="viva"><header><h2>Viva questions and answers</h2><button class="icon" data-copy="viva" aria-label="Copy viva answers"><svg class="ic"><use href="#i-copy"/></svg></button></header>
+    <div id="c-viva">{% for q in m.viva_questions.all %}<details><summary>{{ q.question }}</summary><p>{{ q.answer }}</p></details>{% endfor %}</div></article>
+  <p class="muted note">AI-generated content can contain mistakes. Check important facts against your textbook.</p>
+</section>
+<div class="overlay" id="busy" hidden><div class="card steps"><h2 class="h3">Writing a fresh version</h2>
+  <ol><li>Reading your topic</li><li>Rebuilding notes</li><li>Rebuilding questions</li></ol></div></div>
+{% endblock %}

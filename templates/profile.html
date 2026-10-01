@@ -1,0 +1,10 @@
+{% extends "base.html" %}{% block title %}Profile - StudyMate{% endblock %}
+{% block content %}
+<section class="wrap narrow"><h1 class="h2">Your profile</h1>
+<form method="post" class="card form">{% csrf_token %}
+  <label>Full name<input name="name" value="{{ user.first_name }}" required></label>
+  <label>College<input name="college" value="{{ profile.college }}"></label>
+  <label>Course<input name="course" value="{{ profile.course }}"></label>
+  <label>Semester<input name="semester" value="{{ profile.semester }}"></label>
+  <button class="btn">Save profile</button>
+</form></section>{% endblock %}

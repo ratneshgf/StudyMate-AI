@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="wrap hero">
+  <div class="hero-copy">
+    <h1>Study smarter.<br>Prepare faster.</h1>
+    <p class="lede">Type a topic or photograph a page from your textbook. StudyMate hands back short notes, exam questions with answers, and viva answers you can say out loud.</p>
+    <div class="row"><a class="btn" href="{% url 'signup' %}">Create free account</a><a class="btn ghost" href="{% url 'login' %}">Log in</a></div>
+  </div>
+  <div class="stack" aria-hidden="true">
+    <div class="sheet blue"><b>Notes</b><p>A deadlock is when processes wait on each other forever, and none can move.</p></div>
+    <div class="sheet orange"><b>Exam, 5 marks</b><p>State the four Coffman conditions for deadlock.</p></div>
+    <div class="sheet lime"><b>Viva</b><p>What is starvation, and how is it different?</p></div>
+  </div>
+</section>
+{% endblock %}
