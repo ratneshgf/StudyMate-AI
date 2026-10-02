@@ -5,6 +5,10 @@
   "outputDirectory": "vercel-public",
   "rewrites": [
     {
+      "source": "/",
+      "destination": "https://studymate-ai-api-sv40.onrender.com/"
+    },
+    {
       "source": "/:path*",
       "destination": "https://studymate-ai-api-sv40.onrender.com/:path*"
     }
