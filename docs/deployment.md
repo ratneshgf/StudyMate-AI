@@ -1,4 +1,4 @@
-﻿# Render and Vercel deployment
+# Render and Vercel deployment
 
 StudyMate runs as one Django service on Render. Vercel serves the static frontend assets and proxies page/API requests to Render, so login and CSRF cookies stay on the Vercel domain. The `render.yaml`, `Dockerfile`, and `vercel.mjs` files define the setup.
 
@@ -9,4 +9,3 @@ StudyMate runs as one Django service on Render. Vercel serves the static fronten
 5. Open the Vercel domain and test sign-up, topic generation, saved history, an MCQ test, and a phone-sized viewport. The first request after Render's free instance sleeps may take longer.
 
 `POSTGRES_SCHEMA=studymate` keeps this app's tables in its private Supabase schema. Keep the Session pooler URI in Render only. The free Render filesystem is temporary: generated study content and history persist in Supabase, while uploaded page images may disappear after restart or redeploy. If permanent original-image retention becomes necessary, configure object storage. Vercel's proxy timeout can also constrain long Gemini generations; the direct Render URL remains available for troubleshooting.
-
