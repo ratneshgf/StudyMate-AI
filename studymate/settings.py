@@ -18,6 +18,7 @@ INSTALLED_APPS = [
 ]
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -37,14 +38,10 @@ TEMPLATES = [{
 }]
 WSGI_APPLICATION = "studymate.wsgi.application"
 
-if os.getenv("POSTGRES_DB"):
-    DATABASES = {"default": {
-        "ENGINE": "django.db.backends.postgresql", "NAME": os.getenv("POSTGRES_DB"),
-        "USER": os.getenv("POSTGRES_USER", ""), "PASSWORD": os.getenv("POSTGRES_PASSWORD", ""),
-        "HOST": os.getenv("POSTGRES_HOST", "localhost"),
-    }}
-else:
-    DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": BASE_DIR / "db.sqlite3"}}
+from .database import database_config
+
+DATABASES = {"default": database_config(BASE_DIR, os.environ)}
+POSTGRES_SCHEMA = os.getenv("POSTGRES_SCHEMA", "studymate")
 
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
@@ -59,12 +56,16 @@ USE_TZ = True
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
+STORAGES = {
+    "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
+    "staticfiles": {"BACKEND": "whitenoise.storage.CompressedStaticFilesStorage"},
+}
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 LOGIN_URL = "login"
-LOGIN_REDIRECT_URL = "dashboard"
+LOGIN_REDIRECT_URL = "landing"
 LOGOUT_REDIRECT_URL = "landing"
 
 MAX_UPLOAD_MB = 8
@@ -74,6 +75,9 @@ OLLAMA_URL = os.getenv("OLLAMA_URL", "http://127.0.0.1:11434").rstrip("/")
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "")  # Optional legacy provider
 AI_MODEL = os.getenv("AI_MODEL", "qwen3:4b")
+# Keep GPU selection automatic unless a local machine has been benchmarked.
+OLLAMA_NUM_GPU = int(os.getenv("OLLAMA_NUM_GPU", "-1"))
+OLLAMA_NUM_BATCH = int(os.getenv("OLLAMA_NUM_BATCH", "128"))
 TESSERACT_CMD = os.getenv("TESSERACT_CMD", "")
 
 SECURE_CONTENT_TYPE_NOSNIFF = True
@@ -84,6 +88,12 @@ SESSION_COOKIE_HTTPONLY = True
 if not DEBUG:
     if SECRET_KEY == "dev-only-change-me":
         raise RuntimeError("DJANGO_SECRET_KEY must be set when DJANGO_DEBUG=0")
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+    CSRF_TRUSTED_ORIGINS = [
+        origin.strip().rstrip("/") for origin in
+        os.getenv("CSRF_TRUSTED_ORIGINS", "https://*.vercel.app").split(",")
+        if origin.strip()
+    ]
     SESSION_COOKIE_SECURE = CSRF_COOKIE_SECURE = SECURE_SSL_REDIRECT = True
     SECURE_HSTS_SECONDS = int(os.getenv("SECURE_HSTS_SECONDS", "31536000"))
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True

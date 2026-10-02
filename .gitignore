@@ -23,3 +23,9 @@ htmlcov/
 .idea/
 .DS_Store
 Thumbs.db
+
+# Database exports contain account data and password hashes
+backups/
+
+vercel-public/
+.vercel/

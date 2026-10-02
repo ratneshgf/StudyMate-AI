@@ -6,6 +6,7 @@ urlpatterns = [
     path("app/", views.dashboard, name="dashboard"),
     path("history/", views.history, name="history"),
     path("study/<int:pk>/", views.result, name="result"),
+    path("study/<int:pk>/quiz/", views.new_quiz, name="new_quiz"),
     path("study/<int:pk>/save/", views.save, name="save"),
     path("study/<int:pk>/regenerate/", views.regenerate, name="regenerate"),
     path("study/<int:pk>/delete/", views.delete, name="delete"),

@@ -1,4 +1,4 @@
-{% extends "base.html" %}{% block title %}Study - StudyMate{% endblock %}
+{% extends "base.html" %}{% load static %}{% block title %}Study - StudyMate{% endblock %}
 {% block content %}
 <section class="wrap narrow wide">
   <h1 class="h2">What are you studying today?</h1>
@@ -10,10 +10,16 @@
       <input type="file" name="image" accept="image/jpeg,image/png,image/webp" capture="environment"></label>
     <button class="btn big">Generate study material</button>
   </form>
+  <section id="generation-live" class="card generation-live" hidden aria-label="Study material being generated">
+    <h2 class="h3" id="generation-stage" role="status">Preparing your study material</h2>
+    <p class="muted" id="generation-time"></p>
+    <div id="generation-sections"></div>
+  </section>
   <h2 class="h3">Saved topics</h2>
   {% if recent %}<ul class="list">{% for m in recent %}<li><a href="{% url 'result' m.pk %}">{{ m.topic }}</a><time>{{ m.updated_at|date:"j M" }}</time></li>{% endfor %}</ul>
-  {% else %}<p class="muted">Nothing saved yet. Generate a topic, then press Save to keep it here.</p>{% endif %}
+  {% else %}<p class="muted">No favorites yet. Press Save on a topic to keep it here. Every generated topic appears in History.</p>{% endif %}
 </section>
 <div class="overlay" id="busy" hidden><div class="card steps"><h2 class="h3">Building your study material</h2>
-  <ol><li>Reading your input</li><li>Understanding the concepts</li><li>Writing short notes</li><li>Preparing exam questions</li><li>Preparing viva questions</li></ol></div></div>
+  <ol><li>Reading your input</li><li>Understanding the concepts</li><li>Writing short notes</li><li>Defining related topics</li><li>Preparing exam questions</li><li>Preparing viva questions</li></ol></div></div>
+<script src="{% static 'js/generation.js' %}"></script>
 {% endblock %}

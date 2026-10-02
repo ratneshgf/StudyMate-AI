@@ -1,15 +1,16 @@
-{% extends "base.html" %}
+{% extends "base.html" %}{% load static %}{% block title %}Your classroom - StudyMate AI{% endblock %}
 {% block content %}
-<section class="wrap hero">
-  <div class="hero-copy">
-    <h1>Study smarter.<br>Prepare faster.</h1>
-    <p class="lede">Type a topic or photograph a page from your textbook. StudyMate hands back short notes, exam questions with answers, and viva answers you can say out loud.</p>
-    <div class="row"><a class="btn" href="{% url 'signup' %}">Create free account</a><a class="btn ghost" href="{% url 'login' %}">Log in</a></div>
-  </div>
-  <div class="stack" aria-hidden="true">
-    <div class="sheet blue"><b>Notes</b><p>A deadlock is when processes wait on each other forever, and none can move.</p></div>
-    <div class="sheet orange"><b>Exam, 5 marks</b><p>State the four Coffman conditions for deadlock.</p></div>
-    <div class="sheet lime"><b>Viva</b><p>What is starvation, and how is it different?</p></div>
-  </div>
+<section class="school-hero" id="home">
+<video class="hero-video" autoplay muted loop playsinline poster="{% static 'grad-school/images/main-slider-01.jpg' %}" aria-hidden="true"><source src="{% static 'grad-school/images/course-video.mp4' %}" type="video/mp4"></video>
+<div class="hero-shade"></div><div class="hero-copy"><p class="eyebrow">YOUR PERSONAL AI STUDY COMPANION</p><h1>Your learning.<br><em>No limits.</em></h1><p>Welcome, {{ user.first_name|default:"learner" }}. Turn any topic into<br class="desktop-break"> clear notes, exam practice, and your next breakthrough.</p><a class="btn" href="{% url 'dashboard' %}">Start studying <span aria-hidden="true">&rarr;</span></a><a class="hero-secondary" href="#about">Discover more &darr;</a></div>
+<button class="video-toggle" type="button" aria-pressed="false">Pause background</button>
 </section>
+<div class="feature-strip wrap"><a href="{% url 'dashboard' %}"><span class="feature-number">01</span><span>SMART STUDY NOTES<small>Make complex topics click</small></span><span aria-hidden="true">&nearr;</span></a><a href="{% url 'dashboard' %}"><span class="feature-number">02</span><span>EXAM &amp; VIVA PREP<small>Practice with purpose</small></span><span aria-hidden="true">&nearr;</span></a><a href="{% url 'history' %}"><span class="feature-number">03</span><span>YOUR STUDY LIBRARY<small>Pick up where you left off</small></span><span aria-hidden="true">&nearr;</span></a></div>
+<section class="school-about" id="about"><div class="wrap"><div class="section-intro"><p class="eyebrow">BUILT AROUND THE WAY YOU LEARN</p><h2>A little help. <em>A lot of possibility.</em></h2></div><div class="about-grid"><img src="{% static 'grad-school/images/choose-us-image-01.png' %}" alt="Students learning together in a classroom" loading="lazy"><div><p class="eyebrow">LESS OVERWHELM. MORE UNDERSTANDING.</p><h3>Make room for<br>your next big idea.</h3><p>From a tricky chapter to a last-minute revision session, StudyMate helps you find the essentials. Enter a topic or upload a photo of your textbook to get started.</p><ul class="benefits"><li>Short notes that bring the key concepts together</li><li>Exam and viva questions to check your understanding</li><li>Saved material you can revisit and download</li></ul><a class="btn" href="{% url 'dashboard' %}">Explore your workspace &rarr;</a></div></div></div></section>
+<section class="learning-section" id="how-it-works"><div class="wrap"><div class="section-intro"><p class="eyebrow">FROM CURIOUS TO CONFIDENT</p><h2>Your next study session, simplified.</h2></div><div class="learning-grid">
+<article><img src="{% static 'grad-school/images/courses-01.jpg' %}" alt="A student working through study material" loading="lazy"><div><span class="step-label">STEP 01</span><h3>Bring a topic</h3><p>Type what you are studying or upload a clear photo of a page.</p><a href="{% url 'dashboard' %}">Choose your topic &rarr;</a></div></article>
+<article><img src="{% static 'grad-school/images/courses-02.jpg' %}" alt="A collaborative learning session" loading="lazy"><div><span class="step-label">STEP 02</span><h3>Build understanding</h3><p>Work through concise notes, important concepts, and practice questions.</p><a href="{% url 'dashboard' %}">Create study material &rarr;</a></div></article>
+<article><img src="{% static 'grad-school/images/courses-03.jpg' %}" alt="Books and resources for independent study" loading="lazy"><div><span class="step-label">STEP 03</span><h3>Keep moving forward</h3><p>Every generated topic is kept in your history, ready when it is time to revise.</p><a href="{% url 'history' %}">Open your library &rarr;</a></div></article>
+</div></div></section>
+<section class="school-cta"><div class="wrap"><p class="eyebrow">ONE TOPIC AT A TIME</p><h2>Great things start<br>with <em>understanding.</em></h2><a class="btn" href="{% url 'dashboard' %}">Let's learn something &rarr;</a></div></section>
 {% endblock %}

@@ -8,7 +8,7 @@ Enter a topic or photograph a textbook page. Get short notes, exam Q&A and viva 
 3. `pip install -r requirements.txt`
 4. Copy `.env.example` to `.env`, set a real `DJANGO_SECRET_KEY`, install [Ollama](https://ollama.com/download), then run `ollama pull qwen3:4b`. No AI API key is required.
 5. `python manage.py migrate && python manage.py runserver`
-6. Tests: `python manage.py test`
+6. Tests: `python manage.py test --settings=studymate.test_settings`
 
 ## Layout
 - `accounts/` signup, login, logout, profile (email is the username)
@@ -19,10 +19,22 @@ Enter a topic or photograph a textbook page. Get short notes, exam Q&A and viva 
 
 ## Production deployment
 
-1. Set a long random `DJANGO_SECRET_KEY`, `DJANGO_DEBUG=0`, and an explicit comma-separated `ALLOWED_HOSTS` value.
-2. Configure PostgreSQL with `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, and `POSTGRES_HOST`.
-3. Run Ollama as a local service, select an available `AI_MODEL`, and set `TESSERACT_CMD` if Tesseract is not on `PATH`.
-4. Run `python manage.py check --deploy`, `python manage.py migrate`, and `python manage.py collectstatic --noinput`.
-5. Run behind HTTPS with `gunicorn studymate.wsgi:application`. Put `/static/` and `/media/` behind persistent storage or a CDN; do not use the Django development server for public traffic.
+For the Render backend and Vercel frontend, follow [the deployment guide](docs/deployment.md). Render uses Gemini and Supabase; local development can keep using Ollama. The `/healthz/` endpoint checks the database.
 
-The `/healthz/` endpoint verifies that the application can reach its database and is suitable for a load balancer health check. Uploaded textbook images are private to their owner and are removed when the associated material is deleted. For local AI, run `ollama pull qwen3:4b` (or configure another installed model in `AI_MODEL`) before generating study material.
+## Supabase PostgreSQL
+
+See [the database setup and data migration guide](docs/supabase.md). Existing Django migrations create users, profiles, study material, exam questions, viva questions, and session tables. No Supabase API key is needed for this server-side connection.
+
+## Local generation performance
+
+Ollama generation uses five normal requests: notes, related concepts, exam, viva and MCQ.
+Each question request includes all three difficulty levels. Structured output fixes field/count
+errors; at most one targeted repair per section requests only missing levels and an alternate candidate.
+The Study page streams completed sections immediately. A complete result is saved to history;
+errors or disconnects discard incomplete records. Repeat text searches reuse only the same user's
+validated current-format material. New set and New test still generate fresh questions.
+
+Ollama keeps the model warm for 15 minutes. OLLAMA_NUM_BATCH defaults to 128 and OLLAMA_NUM_GPU
+defaults to -1 (automatic). The local GTX 1650 / qwen3:4b setup was tested with OLLAMA_NUM_GPU=99
+to fit the whole model on its 4 GB GPU; this is a machine-specific .env setting, not a portable default.
+Streaming deployments must disable reverse-proxy response buffering for the Study POST endpoint.

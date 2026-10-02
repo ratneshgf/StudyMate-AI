@@ -4,10 +4,12 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{% block title %}StudyMate AI{% endblock %}</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{% static 'css/app.css' %}">
+<link rel="stylesheet" href="{% static 'css/grad-school.css' %}">
 </head>
 <body>
+<a class="skip-link" href="#main-content">Skip to content</a>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
 <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 16V5m0 0-4 4m4-4 4 4M5 15v3a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="11" height="11" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M15 8V6a1 1 0 0 0-1-1H6a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
@@ -18,18 +20,25 @@
 <symbol id="i-tick" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 </defs></svg>
 <header class="top"><div class="wrap bar">
-  <a class="brand" href="{% url 'landing' %}" aria-label="StudyMate AI home">
-    <svg viewBox="0 0 32 32" width="30" height="30"><rect x="2" y="3" width="28" height="7" rx="3.5" fill="#2340FF"/><rect x="2" y="12.5" width="21" height="7" rx="3.5" fill="#FF7A1A"/><rect x="2" y="22" width="14" height="7" rx="3.5" fill="#A6E22E"/></svg>
-    <span>StudyMate</span></a>
-  <nav>
-  {% if user.is_authenticated %}
-    <a href="{% url 'dashboard' %}">Study</a><a href="{% url 'history' %}">History</a><a href="{% url 'profile' %}">{{ user.first_name|default:"Profile" }}</a>
-    <form method="post" action="{% url 'logout' %}">{% csrf_token %}<button class="link">Log out</button></form>
-  {% else %}
-    <a href="{% url 'login' %}">Log in</a><a class="btn sm" href="{% url 'signup' %}">Get started</a>
-  {% endif %}
-  </nav></div></header>
+<a class="brand" href="{% url 'landing' %}" aria-label="StudyMate home"><span><em>STUDY</em>MATE<span class="brand-ai">AI</span></span></a>
+<button class="nav-toggle" aria-expanded="false" aria-controls="main-nav" aria-label="Toggle navigation">Menu <span aria-hidden="true">&#9776;</span></button>
+<nav id="main-nav" aria-label="Main navigation">
+{% if user.is_authenticated %}
+<a href="{% url 'landing' %}" {% if request.resolver_match.url_name == 'landing' %}aria-current="page"{% endif %}>Home</a>
+<a href="{% url 'landing' %}#about">About</a>
+<a href="{% url 'dashboard' %}" {% if request.resolver_match.url_name == 'dashboard' %}aria-current="page"{% endif %}>Study</a>
+<a href="{% url 'history' %}" {% if request.resolver_match.url_name == 'history' %}aria-current="page"{% endif %}>History</a>
+<a href="{% url 'profile' %}" {% if request.resolver_match.url_name == 'profile' %}aria-current="page"{% endif %}>Profile</a>
+<form method="post" action="{% url 'logout' %}">{% csrf_token %}<button class="nav-logout">Sign out</button></form>
+{% else %}
+<span class="nav-note">YOUR NEXT CHAPTER STARTS HERE</span>
+<a href="{% url 'login' %}" {% if request.resolver_match.url_name == 'login' %}aria-current="page"{% endif %}>Sign in</a>
+<a class="btn sm" href="{% url 'signup' %}">Create account</a>
+{% endif %}
+</nav></div></header>
 {% if messages %}<div class="wrap toasts">{% for m in messages %}<p class="toast {{ m.tags }}" role="status">{{ m }}</p>{% endfor %}</div>{% endif %}
-<main>{% block content %}{% endblock %}</main>
+<main id="main-content">{% block content %}{% endblock %}</main>
+<footer class="site-footer"><div class="wrap"><span>StudyMate AI &middot; Make every study session count.</span></div></footer>
 <script src="{% static 'js/app.js' %}"></script>
+<script src="{% static 'js/navigation.js' %}"></script>
 </body></html>

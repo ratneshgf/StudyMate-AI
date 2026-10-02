@@ -1,9 +1,19 @@
-{% extends "base.html" %}{% block title %}Log in - StudyMate{% endblock %}
+{% extends "base.html" %}{% load static %}{% block title %}Sign in - StudyMate AI{% endblock %}
 {% block content %}
-<section class="wrap narrow"><h1 class="h2">Welcome back</h1>
-<form method="post" class="card form">{% csrf_token %}
-  <label>Email<input type="email" name="email" value="{{ form.email.value|default:'' }}" autocomplete="email" required autofocus></label>
-  <label>Password<input type="password" name="password" autocomplete="current-password" required></label>
-  <button class="btn">Log in</button>
-  <p class="muted">New here? <a href="{% url 'signup' %}">Create an account</a></p>
-</form></section>{% endblock %}
+<section class="signin-layout">
+<div class="signin-story">
+<div class="story-content"><p class="eyebrow">A LITTLE FOCUS. A BIG FUTURE.</p><h1>Your next <br>chapter <br>starts <em>here.</em></h1><p>Turn what you learn into what you know.<br>Your personal study companion, all in one place.</p>
+<div class="story-features"><span>01 &nbsp; Clearer notes</span><span>02 &nbsp; Better revision</span><span>03 &nbsp; Confident answers</span></div></div>
+<div class="story-caption">LEARN WITH PURPOSE. &nbsp; GROW WITH CONFIDENCE.</div>
+</div>
+<div class="signin-panel"><div class="signin-box"><p class="eyebrow">WELCOME TO STUDYMATE</p><h2>Good to see you.</h2><p class="muted">Sign in and pick up your learning journey.</p>
+<form method="post" class="form signin-form">{% csrf_token %}
+{{ form.non_field_errors }}
+<label for="email">Email address<input id="email" type="email" name="email" value="{{ form.email.value|default:'' }}" autocomplete="email" placeholder="you@example.com" required autofocus>{% for error in form.email.errors %}<span class="err">{{ error }}</span>{% endfor %}</label>
+<label for="password">Password<span class="password-field"><input id="password" type="password" name="password" autocomplete="current-password" placeholder="Enter your password" required><button type="button" class="password-toggle" aria-controls="password" aria-pressed="false">Show</button></span>{% for error in form.password.errors %}<span class="err">{{ error }}</span>{% endfor %}</label>
+<button class="btn big" type="submit">Sign in <span aria-hidden="true">&rarr;</span></button>
+</form>
+<p class="signup-prompt">New to StudyMate? <a href="{% url 'signup' %}">Create an account</a></p>
+<div class="signin-footnote"><span aria-hidden="true">&#10003;</span> Your notes. Your progress. Your space.</div>
+</div></div>
+</section>{% endblock %}

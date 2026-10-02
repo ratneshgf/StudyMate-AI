@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError, transaction
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_POST
+from django.utils.http import url_has_allowed_host_and_scheme
 
 from .forms import LoginForm, SignupForm
 from .models import Profile
@@ -24,18 +25,23 @@ def signup_view(request):
             form.add_error("email", "An account with this email already exists.")
             return render(request, "registration/signup.html", {"form": form})
         login(request, user)
-        return redirect("dashboard")
+        return redirect("landing")
     return render(request, "registration/signup.html", {"form": form})
 
 
 def login_view(request):
+    if request.user.is_authenticated:
+        return redirect("landing")
     form = LoginForm(request.POST or None)
     if request.method == "POST" and form.is_valid():
         user = authenticate(request, username=form.cleaned_data["email"].lower(),
                             password=form.cleaned_data["password"])
         if user:
             login(request, user)
-            return redirect(request.GET.get("next") or "dashboard")
+            next_url = request.GET.get("next", "")
+            if next_url and url_has_allowed_host_and_scheme(next_url, {request.get_host()}, require_https=request.is_secure()):
+                return redirect(next_url)
+            return redirect("landing")
         messages.error(request, "Email or password is incorrect.")
     return render(request, "registration/login.html", {"form": form})
 

@@ -1,0 +1,132 @@
+
+/* StudyMate adaptation of TemplateMo 557 Grad School. */
+:root{--ink:#172238;--mute:#657083;--paper:#f4f5f7;--line:#e1e4ea;--blue:#9b6100;--blue-t:#fff2d9;--orange:#f5a425;--r:5px;--display:'Montserrat',Arial,sans-serif;--body:'Montserrat',Arial,sans-serif}
+html{scroll-behavior:smooth;scroll-padding-top:100px}
+body{font-size:15px;line-height:1.7}
+main{min-height:calc(100vh - 160px)}
+em{font-style:normal}.wrap{max-width:1200px}
+.top{position:sticky;top:0;z-index:30;background:#162238;border-color:#ffffff12}
+.bar{height:86px;max-width:1440px;padding:0 5%}
+.brand{font-size:29px;letter-spacing:-1px;color:white}.brand em{color:#f5a425}.brand-ai{font-size:11px;letter-spacing:1px;border:1px solid #f5a42566;color:#f5a425;padding:3px 5px;margin-left:8px;vertical-align:middle}
+nav{gap:25px}nav a,.nav-logout{font-size:11px;text-transform:uppercase;letter-spacing:1px;font-weight:700;color:white}
+nav a:not(.btn){padding:9px 0;border-bottom:2px solid transparent}nav a:hover,nav a[aria-current]{color:#f5a425;border-color:#f5a425}
+.nav-logout{border:1px solid #ffffff45;background:transparent;padding:10px 13px;cursor:pointer}.nav-logout:hover{border-color:#f5a425;color:#f5a425}
+.nav-note{font-size:9px;letter-spacing:1.7px;color:#b6becb}
+.btn{background:#f5a425;color:#172238;border-radius:2px;font-size:11px;letter-spacing:1px;text-transform:uppercase;font-weight:800;padding:16px 24px;justify-content:center;gap:22px}
+.btn:hover{background:#ffb847;box-shadow:0 5px 16px #0002;transform:translateY(-1px)}.btn.sm{font-size:10px;padding:11px 16px}.btn.big{font-size:12px}
+.nav-toggle{display:none}.skip-link{position:fixed;left:15px;top:-80px;background:white;padding:10px;z-index:100}.skip-link:focus{top:10px}
+.site-footer{background:#111c30;color:#a9b2c1;font-size:11px;padding:24px 0;border-top:1px solid #ffffff14}
+.site-footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.eyebrow{font-size:10px;font-weight:800;letter-spacing:2.5px;line-height:1.8;text-transform:uppercase}
+.signin-layout{display:grid;grid-template-columns:1.1fr 1fr;min-height:calc(100vh - 154px)}
+.signin-story{position:relative;display:flex;flex-direction:column;justify-content:center;padding:75px 12%;color:#fff;background:linear-gradient(100deg,#111d32ed,#15263aba),url('../grad-school/images/main-slider-01.jpg') center/cover}
+.story-content{max-width:530px}.story-content .eyebrow{color:#f5a425}
+.story-content h1{font-size:clamp(48px,5.7vw,84px);line-height:1.06;font-weight:800;letter-spacing:-3px;margin:25px 0}
+.story-content h1 em{color:#f5a425}.story-content>p:not(.eyebrow){color:#c1c8d3;font-size:14px;line-height:1.9}
+.story-features{display:grid;gap:13px;border-top:1px solid #ffffff26;margin-top:34px;padding-top:24px;font-size:11px;font-weight:600;letter-spacing:.5px}
+.story-caption{margin-top:50px;font-size:8px;letter-spacing:1.8px;color:#a6b1c2}
+.signin-panel{display:grid;place-items:center;padding:60px 40px;background:#fff}
+.signin-box{width:100%;max-width:360px}.signin-box>.eyebrow{color:#9b6100;margin-bottom:13px}
+.signin-box h2{font-size:34px;letter-spacing:-1px}.signin-box>.muted{font-size:13px;margin:15px 0 33px}
+.signin-form{gap:22px}.form label{font-size:12px;gap:8px}.form input{border:1px solid #dbe0e7;border-radius:3px;padding:14px;font-size:13px;width:100%;min-width:0}
+.form input:focus{border-color:#b77913;outline:2px solid #f5a42544}
+.password-field{position:relative;display:block}.password-field input{padding-right:65px}
+.password-toggle{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:0;font-size:11px;font-weight:600;color:#6b7280;cursor:pointer;padding:8px}
+.signup-prompt{text-align:center;font-size:12px;margin-top:24px}.signup-prompt a{font-weight:700;text-underline-offset:3px}
+.signin-footnote{border-top:1px solid #e7e9ee;padding-top:25px;margin-top:32px;color:#77808e;text-align:center;font-size:10px}.signin-footnote span{color:#9b6100;margin-right:5px}
+.school-hero{position:relative;min-height:610px;height:76vh;max-height:850px;display:grid;place-items:center;text-align:center;color:#fff;overflow:hidden;background:#152238}
+.hero-video,.hero-shade{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}.hero-shade{background:#132039c9}
+.hero-copy{position:relative;padding:65px 24px 100px;max-width:950px}.hero-copy .eyebrow{font-size:12px;letter-spacing:3px}
+.hero-copy h1{font-size:clamp(48px,6.7vw,92px);text-transform:uppercase;line-height:1.07;font-weight:800;letter-spacing:-2px;margin:20px 0}
+.hero-copy h1 em{color:#f5a425}.hero-copy>p:not(.eyebrow){color:#d0d5df;font-size:15px;margin-bottom:28px}
+.hero-secondary{display:inline-block;color:white;text-decoration:none;font-size:11px;font-weight:700;padding:16px 22px}
+.video-toggle{position:absolute;right:18px;bottom:70px;background:#111c30ba;border:1px solid #ffffff45;color:white;padding:7px 10px;font-size:10px;cursor:pointer}
+.feature-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;position:relative;margin-top:-51px;z-index:2}
+.feature-strip>a{display:flex;align-items:center;gap:16px;background:#101c32;color:white;padding:27px 22px;text-decoration:none;border-bottom:3px solid #f5a425;font-size:11px;font-weight:800;letter-spacing:.8px;transition:background .2s}
+.feature-strip>a:hover{background:#26374e}.feature-strip small{display:block;font-size:10px;font-weight:400;color:#b8c1cf;margin-top:4px;letter-spacing:0}
+.feature-number{color:#f5a425;font-size:26px}.feature-strip>a>span:last-child{margin-left:auto;color:#f5a425;font-size:22px}
+.school-about{color:white;background:#172238 url('../grad-school/images/choosing-bg.jpg') center/cover;padding:95px 0}
+.section-intro{text-align:center;margin-bottom:55px}.section-intro .eyebrow{color:#f5a425}.section-intro h2{font-size:clamp(26px,3vw,36px);line-height:1.3}.section-intro h2 em{color:#f5a425}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:65px;align-items:center}.about-grid>img{width:100%;height:auto}
+.about-grid .eyebrow{font-size:9px;color:#f5a425}.about-grid h3{font-size:34px;line-height:1.2;margin:15px 0 20px}.about-grid p:not(.eyebrow),.benefits{font-size:13px;color:#c2cad6}
+.benefits{list-style:none;padding:0;margin:20px 0 28px}.benefits li{margin:9px 0;padding-left:22px;position:relative}.benefits li:before{content:'\2713';color:#f5a425;position:absolute;left:0}
+.learning-section{padding:85px 0;background:#f4f5f7}.learning-section .eyebrow{color:#9b6100}.learning-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+.learning-grid article{background:white;border:1px solid #e4e6eb}.learning-grid img{width:100%;aspect-ratio:1.9;object-fit:cover;display:block}.learning-grid article>div{padding:25px}
+.step-label{font-size:9px;letter-spacing:2px;color:#9b6100;font-weight:800}.learning-grid h3{font-size:20px;margin:13px 0}.learning-grid p{font-size:13px;color:#657083}
+.learning-grid a{font-size:11px;font-weight:700;text-decoration:none}
+.school-cta{padding:85px 24px;text-align:center;background:linear-gradient(#122039df,#122039df),url('../grad-school/images/coming-soon-bg.jpg') center/cover;color:white}
+.school-cta .eyebrow,.school-cta em{color:#f5a425}.school-cta h2{font-size:clamp(35px,4.5vw,56px);line-height:1.2;margin:20px 0 30px}
+.card{border:1px solid #dfe3eb;border-radius:5px;box-shadow:0 10px 35px #15223808}.h2{font-size:32px}.narrow{max-width:530px}.narrow.wide{max-width:780px}
+.jump{top:86px}.panel{scroll-margin-top:170px}.overlay{z-index:60}
+@media(min-width:1500px){.signin-story{padding-left:20%}}
+@media(max-width:1000px){.nav-note{display:none}nav{gap:17px}.bar{padding:0 24px}.brand{font-size:24px}.signin-story{padding:55px 9%}.feature-strip{gap:12px}.feature-strip>a{padding:22px 15px;gap:10px}.feature-number{font-size:22px}.about-grid{gap:35px}}
+@media(max-width:760px){.bar{height:72px}.nav-toggle{display:flex;gap:10px;align-items:center;background:transparent;border:1px solid #ffffff50;color:white;padding:8px 12px;font:inherit;font-size:12px;cursor:pointer}#main-nav{display:none;position:absolute;top:72px;left:0;right:0;padding:20px 24px;background:#162238;flex-direction:column;align-items:stretch;gap:12px;border-top:1px solid #ffffff20}#main-nav.is-open{display:flex}nav a{display:block}.nav-logout{width:100%;text-align:left}.signin-layout{grid-template-columns:1fr}.signin-story{padding:40px 28px}.story-content h1{font-size:46px;letter-spacing:-1.5px}.story-content h1 br{display:none}.story-features,.story-caption{display:none}.signin-panel{padding:42px 25px}.signin-box h2{font-size:30px}.school-hero{min-height:570px;height:auto}.hero-copy{padding:70px 20px 120px}.hero-copy h1{font-size:50px}.hero-copy .eyebrow{font-size:10px}.feature-strip{grid-template-columns:1fr;margin-top:-35px;gap:10px}.feature-strip>a{padding:18px 23px}.school-about,.learning-section{padding:60px 0}.about-grid,.learning-grid{grid-template-columns:1fr;gap:30px}.about-grid>img{max-width:500px;margin:auto}.section-intro{margin-bottom:35px}.learning-grid{max-width:500px;margin:auto}.school-cta{padding:60px 20px}.site-footer .wrap{justify-content:center;text-align:center}.jump{top:72px}.panel{scroll-margin-top:170px}.narrow{padding-top:36px}.hero-secondary{display:block;padding-top:20px}.video-toggle{bottom:48px}.desktop-break{display:none}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+
+.related-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 30px;padding-left:22px}.related-list li{padding:8px 0}.related-list li::marker{color:#a96800;font-weight:700}.related-list h3{font-size:17px;margin:0 0 6px}.related-list p{font-size:14px;margin:0;color:#435064}@media(max-width:650px){.related-list{grid-template-columns:1fr}}
+
+/* Topic MCQ practice */
+[hidden]{display:none!important}
+.quiz-panel{background:#172238;color:#fff;border-color:#172238;padding:36px}
+.quiz-panel .eyebrow{color:#f5a425}
+.quiz-panel h2{border:0;font-size:30px;padding:0;margin:10px 0 15px}
+.quiz-intro>p{color:#c4ccd7;max-width:650px;font-size:14px}
+.quiz-intro .btn{margin-top:14px}
+.quiz-progress{display:inline-block;background:#ffffff16;border:1px solid #ffffff40;padding:8px 14px;font-size:12px;font-weight:700;letter-spacing:.5px;margin:0 0 18px}
+.quiz-questions{display:grid;gap:24px}
+.quiz-question{min-width:0;margin:0;padding:23px;border:1px solid #ffffff38;border-radius:5px;background:#ffffff0b}
+.quiz-question legend{float:left;width:100%;padding:0;margin:0 0 20px}
+.quiz-number{display:block;color:#f5a425;font-size:10px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;margin-bottom:9px}
+.quiz-prompt{display:block;font-size:16px;line-height:1.5;font-weight:700}
+.quiz-options{clear:both;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.quiz-option{display:flex;align-items:center;gap:12px;min-width:0;padding:12px 15px;background:#fff;color:#172238;border:2px solid transparent;border-radius:4px;cursor:pointer;font-size:13px;line-height:1.45;transition:border-color .15s,background .15s}
+.quiz-option:hover{border-color:#f5a425}
+.quiz-option input{flex:none;width:17px;height:17px;margin:0;accent-color:#b87912;padding:0}
+.quiz-option.is-correct{background:#e0f4df;border-color:#52a46a;color:#135a2d}
+.quiz-option.is-wrong{background:#ffe7e1;border-color:#d27867;color:#852b1e}
+.quiz-question.is-answered .quiz-option{cursor:default}
+.quiz-question.is-answered .quiz-option:not(.is-correct):not(.is-wrong){opacity:.65}
+.quiz-feedback{margin:16px 0 0;padding:11px 14px;border-radius:3px;font-size:13px;font-weight:700}
+.quiz-feedback.is-correct{background:#dff5e2;color:#155e31}
+.quiz-feedback.is-wrong{background:#ffe7e1;color:#872b21}
+.quiz-result{margin-top:28px;padding:24px;background:#fff;color:#172238;border-left:5px solid #f5a425}
+.quiz-result h3{font-size:24px;margin:0 0 10px}
+.quiz-result p{font-size:13px}
+@media(max-width:650px){.quiz-panel{padding:20px}.quiz-options{grid-template-columns:1fr}.quiz-question{padding:18px}.quiz-panel h2{font-size:24px}}
+
+.quiz-result-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:18px}.quiz-result-actions .btn.ghost{background:transparent;color:#172238;box-shadow:inset 0 0 0 2px #172238}.quiz-result-actions .btn.ghost:hover{box-shadow:inset 0 0 0 2px #172238,0 5px 16px #0002}.quiz-result-actions .btn:disabled{opacity:.6;cursor:wait}.quiz-error{color:#9c2923;font-weight:700;font-size:13px;margin:12px 0 0}
+
+/* Difficulty cards for exam, viva and MCQ practice */
+.difficulty-grid{display:grid;gap:18px}.level-box{background:#fff;border:1px solid #dfe3eb;border-left:5px solid #b0bac8;border-radius:5px;padding:20px 22px;min-width:0}.level-box h3,.quiz-level-card h3{font-size:21px;margin:0 0 18px;display:flex;align-items:center;justify-content:space-between;gap:15px}.level-box h3 small,.quiz-level-card h3 small{font:700 11px/1.4 var(--body);letter-spacing:.6px;text-transform:uppercase;color:#687386;white-space:nowrap}.level-box details{max-width:none}.level-box .muted{font-size:13px}.level-easy{border-left-color:#43a571}.level-medium{border-left-color:#f5a425}.level-advanced{border-left-color:#b34d67}.level-practice{border-left-color:#8a9aaa}.marks-badge{display:inline-block;background:#fff2d9;color:#8d5800;border-radius:3px;font-size:10px;text-transform:uppercase;padding:4px 6px;margin-right:8px;white-space:nowrap}.quiz-level-card{border-left:5px solid #b0bac8;background:#ffffff0d;padding:20px;display:grid;gap:17px}.quiz-level-card.level-easy{border-color:#43a571}.quiz-level-card.level-medium{border-color:#f5a425}.quiz-level-card.level-advanced{border-color:#b34d67}.quiz-level-card h3{margin:0;color:#fff}.quiz-level-card h3 small{color:#cbd3df}.quiz-questions{gap:25px}.quiz-level-card .quiz-question{background:#ffffff0a}.quiz-feedback{white-space:pre-line}@media(max-width:650px){.level-box,.quiz-level-card{padding:15px}.level-box h3,.quiz-level-card h3{font-size:18px}}
+
+.quiz-error.is-loading{color:#56677b}
+
+
+.generation-live { margin: 24px 0; padding: 24px; }
+.generation-section { border-top: 1px solid #dce1e8; margin-top: 22px; padding-top: 16px; }
+.generation-section p, .generation-section li { line-height: 1.65; white-space: pre-line; }
+.generation-section details { margin: 10px 0; }
+.generation-section summary { cursor: pointer; font-weight: 600; }
+
+/* Comfortable controls and readable content on narrow phones. */
+@media (max-width: 480px) {
+  .wrap, .container { max-width: 100%; padding-left: 16px; padding-right: 16px; }
+  .bar { padding: 0 16px; gap: 8px; }
+  .brand { font-size: 21px; letter-spacing: -.6px; white-space: nowrap; }
+  .brand-ai { font-size: 8px; margin-left: 3px; padding: 2px 3px; }
+  .nav-toggle { min-height: 44px; min-width: 44px; justify-content: center; }
+  #main-nav a, #main-nav button { min-height: 44px; display: flex; align-items: center; }
+  .signin-panel { order: -1; padding: 36px 20px; }
+  .signin-story { padding: 36px 20px; }
+  .story-content h1 { font-size: 38px; }
+  .school-hero { min-height: 510px; }
+  .hero-video { display: none; }
+  .hero-copy { padding: 60px 16px 100px; }
+  .hero-copy h1 { font-size: clamp(34px, 10vw, 46px); }
+  .hero-copy > p:not(.eyebrow) { font-size: 13px; }
+  .feature-strip > a, .quiz-option, .btn { min-height: 44px; }
+  .narrow, .narrow.wide { width: 100%; max-width: 100%; }
+  .card, .panel, .quiz-panel, .level-box { min-width: 0; }
+  .quiz-prompt, .generation-section, .level-box, .related-list { overflow-wrap: anywhere; }
+  .quiz-result-actions .btn { flex: 1 1 130px; }
+}

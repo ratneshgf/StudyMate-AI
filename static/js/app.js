@@ -7,18 +7,43 @@
   });
   if (t) t.dataset.d = t.textContent;
 
-  // Progress overlay: steps light up while the server works
-  function busy() {
-    var o = document.getElementById('busy'); if (!o) return;
-    o.hidden = false;
-    var s = o.querySelectorAll('li'), i = 0;
-    s[0].className = 'now';
-    setInterval(function () {
-      if (i < s.length - 1) { s[i].className = 'done'; s[++i].className = 'now'; }
-    }, 3500);
-  }
+  // Prevent duplicate requests and show elapsed time, not simulated progress.
+  var busyTimer;
   document.querySelectorAll('#gen-form, form[data-busy]').forEach(function (fm) {
-    fm.addEventListener('submit', busy);
+    fm.addEventListener('submit', function (event) {
+      if (fm.dataset.submitting === 'true') {
+        event.preventDefault();
+        return;
+      }
+      fm.dataset.submitting = 'true';
+      var overlay = document.getElementById('busy');
+      if (!overlay) return;
+      overlay.hidden = false;
+      var steps = overlay.querySelector('ol');
+      if (steps) steps.hidden = true;
+      var status = overlay.querySelector('.generation-status');
+      if (!status) {
+        status = document.createElement('p');
+        status.className = 'generation-status';
+        overlay.querySelector('.steps').append(status);
+      }
+      var started = Date.now();
+      function update() {
+        var seconds = Math.floor((Date.now() - started) / 1000);
+        status.textContent = 'Preparing notes and questions. Time elapsed: ' + seconds + 's.';
+      }
+      update();
+      clearInterval(busyTimer);
+      busyTimer = setInterval(update, 1000);
+    });
+  });
+  window.addEventListener('pageshow', function () {
+    clearInterval(busyTimer);
+    document.querySelectorAll('[data-submitting]').forEach(function (fm) {
+      delete fm.dataset.submitting;
+    });
+    var overlay = document.getElementById('busy');
+    if (overlay) overlay.hidden = true;
   });
 
   // Copy buttons

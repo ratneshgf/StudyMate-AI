@@ -1,4 +1,4 @@
-{% extends "base.html" %}{% block title %}{{ m.topic }} - StudyMate{% endblock %}
+{% extends "base.html" %}{% load static %}{% block title %}{{ m.topic }} - StudyMate{% endblock %}
 {% block content %}
 <section class="wrap result">
   <h1 class="h1">{{ m.topic }}</h1>
@@ -11,21 +11,50 @@
       <button class="chip" name="mode" value="fresh">New set</button><button class="chip" name="mode" value="shorter">Shorter</button>
       <button class="chip" name="mode" value="detailed">More detail</button><button class="chip" name="mode" value="easier">Easier</button></form>
   </div>
-  <nav class="jump" aria-label="Sections"><a class="c-blue" href="#notes">Short notes</a><a class="c-orange" href="#exam">Exam questions</a><a class="c-lime" href="#viva">Viva questions</a></nav>
+  <nav class="jump" aria-label="Sections"><a class="c-blue" href="#notes">Short notes</a><a class="c-blue" href="#related">Related topics</a><a class="c-orange" href="#exam">Exam questions</a><a class="c-lime" href="#viva">Viva questions</a><a class="c-orange" href="#mcq">MCQ test</a></nav>
 
   <article class="panel blue" id="notes"><header><h2>Short notes</h2><button class="icon" data-copy="notes" aria-label="Copy short notes"><svg class="ic"><use href="#i-copy"/></svg></button></header>
     <div id="c-notes"><p class="def">{{ m.notes.definition }}</p>
     <ul class="pts">{% for p in m.notes.key_points %}<li>{{ p }}</li>{% endfor %}</ul>
     <p class="tags">{% for c in m.notes.important_concepts %}<span>{{ c }}</span>{% endfor %}</p></div></article>
 
+  <article class="panel blue" id="related"><header><h2>Related topics and definitions</h2></header>
+    {% if m.notes.related_topics %}<ol class="related-list">{% for item in m.notes.related_topics %}<li><h3>{{ item.title }}</h3><p>{{ item.definition }}</p></li>{% endfor %}</ol>
+    {% else %}<p class="muted">This material was created before related topics were added. Use New set to generate them.</p>{% endif %}</article>
+
   <article class="panel orange" id="exam"><header><h2>Exam questions and answers</h2><button class="icon" data-copy="exam" aria-label="Copy exam answers"><svg class="ic"><use href="#i-copy"/></svg></button></header>
-    <div id="c-exam">{% for marks, qs in groups %}<h3>{{ marks }} mark{{ marks|pluralize }}</h3>
-    {% for q in qs %}<details><summary>{{ q.question }}</summary><p>{{ q.answer }}</p></details>{% endfor %}{% endfor %}</div></article>
+    <div id="c-exam" class="difficulty-grid">{% for level, questions in exam_levels %}<section class="level-box level-{{ level }}"><h3>{{ level|title }} <small>{{ questions|length }} questions</small></h3>
+      {% for q in questions %}<details><summary><span class="marks-badge">{{ q.marks }} mark{{ q.marks|pluralize }}</span> {{ q.question }}</summary><p>{{ q.answer }}</p></details>
+      {% empty %}<p class="muted">Use New set to generate {{ level }} questions for this topic.</p>{% endfor %}</section>{% endfor %}</div></article>
 
   <article class="panel lime" id="viva"><header><h2>Viva questions and answers</h2><button class="icon" data-copy="viva" aria-label="Copy viva answers"><svg class="ic"><use href="#i-copy"/></svg></button></header>
-    <div id="c-viva">{% for q in m.viva_questions.all %}<details><summary>{{ q.question }}</summary><p>{{ q.answer }}</p></details>{% endfor %}</div></article>
+    <div id="c-viva" class="difficulty-grid">{% for level, questions in viva_levels %}<section class="level-box level-{{ level }}"><h3>{{ level|title }} <small>{{ questions|length }} questions</small></h3>
+      {% for q in questions %}<details><summary>{{ q.question }}</summary><p>{{ q.answer }}</p></details>
+      {% empty %}<p class="muted">Use New set to generate {{ level }} questions for this topic.</p>{% endfor %}</section>{% endfor %}</div></article>
+  <section class="panel quiz-panel" id="mcq" aria-labelledby="mcq-heading">
+    <span class="eyebrow">PRACTICE WHAT YOU LEARNED</span>
+    <h2 id="mcq-heading">Ready for a quick MCQ test?</h2>
+    <div class="quiz-intro" id="quiz-intro">
+      <p>10 topic-related questions. Choose one of four answers and see whether you got it right straight away.</p>
+      {% if quiz %}<button class="btn" type="button" id="start-mcq">Start MCQ test <span aria-hidden="true">&rarr;</span></button>
+      {% else %}<p class="muted">This material needs a new question set for the level-based test. Use <strong>New set</strong> above to generate it.</p>{% endif %}
+    </div>
+    {% if quiz %}<div class="quiz-body" id="quiz-body" hidden>
+      <p class="quiz-progress" id="quiz-progress" role="status" aria-live="polite">0 of 10 answered</p>
+      <div class="quiz-questions">
+      {% for level, items in quiz_levels %}<section class="quiz-level-card level-{{ level }}" data-level="{{ level }}"><h3>{{ level|title }} <small>{{ items|length }} questions</small></h3>
+      {% for item in items %}<fieldset class="quiz-question" data-difficulty="{{ item.difficulty }}" data-correct-index="{{ item.correct_index }}" data-correct-answer="{{ item.correct_answer }}" data-explanation="{{ item.explanation }}">
+        <legend><span class="quiz-number">Question {{ item.number }} of 10</span><span class="quiz-prompt">{{ item.question }}</span></legend>
+        <div class="quiz-options">{% for option in item.options %}<label class="quiz-option"><input type="radio" name="mcq-{{ item.number }}" value="{{ forloop.counter0 }}"><span>{{ option }}</span></label>{% endfor %}</div>
+        <p class="quiz-feedback" aria-live="polite" hidden></p>
+      </fieldset>{% endfor %}</section>{% endfor %}
+      </div>
+      <div class="quiz-result" id="quiz-result" hidden><h3 id="quiz-score" tabindex="-1"></h3><p>You can review every answer above or try the test again.</p><div class="quiz-result-actions"><button type="button" class="btn" id="retry-mcq">Try again</button><button type="button" class="btn ghost" id="new-mcq" data-url="{% url 'new_quiz' m.pk %}">New test</button></div><p id="quiz-error" class="quiz-error" role="alert" hidden></p></div>
+    </div>{% endif %}
+  </section>
   <p class="muted note">AI-generated content can contain mistakes. Check important facts against your textbook.</p>
 </section>
 <div class="overlay" id="busy" hidden><div class="card steps"><h2 class="h3">Writing a fresh version</h2>
   <ol><li>Reading your topic</li><li>Rebuilding notes</li><li>Rebuilding questions</li></ol></div></div>
+<script src="{% static 'js/mcq.js' %}" defer></script>
 {% endblock %}

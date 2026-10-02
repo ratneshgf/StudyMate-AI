@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: studymate-ai-api
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /healthz/
+    envVars:
+      - key: DJANGO_DEBUG
+        value: "0"
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: ALLOWED_HOSTS
+        value: ".onrender.com,.vercel.app"
+      - key: CSRF_TRUSTED_ORIGINS
+        value: "https://*.vercel.app"
+      - key: POSTGRES_SCHEMA
+        value: studymate
+      - key: DATABASE_URL
+        sync: false
+      - key: AI_PROVIDER
+        value: gemini
+      - key: AI_MODEL
+        value: gemini-2.5-flash
+      - key: GEMINI_API_KEY
+        sync: false

@@ -44,6 +44,7 @@ class VivaQuestion(models.Model):
     material = models.ForeignKey(StudyMaterial, on_delete=models.CASCADE, related_name="viva_questions")
     question = models.TextField()
     answer = models.TextField()
+    difficulty = models.CharField(max_length=20, default="medium")
 
     class Meta:
         ordering = ["id"]
