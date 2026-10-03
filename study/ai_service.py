@@ -42,8 +42,10 @@ QUANT_GUIDANCE = (
 )
 THEORY_GUIDANCE = (
     "This is a conceptual topic. Easy: recall and comprehension. "
-    "Medium: apply an idea to a concrete situation. Advanced: analytical case, trade-off, "
-    "comparison, justification or design; never merely ask for a definition."
+    "Medium: apply an idea to a concrete situation. Advanced: a realistic multi-step "
+    "scenario requiring debugging, design trade-offs, comparison or justification; "
+    "for programming topics include code behavior, failures, performance or architecture. "
+    "Never use a basic definition or list question at the advanced level."
 )
 
 PROMPT = """You are a careful college-level study assistant. Topic or extracted text: {text}

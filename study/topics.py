@@ -40,6 +40,17 @@ def is_advanced_problem(question, quantitative):
                       "system of", "optimiz", "maximum", "minimum", "integral", "derivative",
                       "quadratic", "three", "sequence", "probability", "permutation")
         return has_calculation(text) and (len(numbers) >= 3 or any(word in text for word in complexity))
-    return len(text) >= 45 and any(word in text for word in (
-        "compare", "analy", "evaluat", "design", "justify", "scenario", "case", "apply",
-        "trade-off", "tradeoff", "why", "how would", "what happens if", "under what"))
+    if len(text) < 45:
+        return False
+    # Wording alone cannot prove difficulty. Reject obvious recall prompts, then
+    # allow applied questions even when the model uses verbs outside a short list.
+    if re.match(r"^(?:define|list|name|state|who is|when was)\b", text):
+        return False
+    return any(word in text for word in (
+        "compare", "analy", "evaluat", "design", "justify", "scenario", "case",
+        "apply", "trade-off", "tradeoff", "why", "how", "what happens if",
+        "under what", "explain", "discuss", "propose", "debug", "refactor",
+        "implement", "optimiz", "diagnos", "investigat", "given", "suppose",
+        "consider", "concurrent", "failure", "bottleneck", "performance",
+        "memory leak", "production", "architect", "competing", "impact",
+    ))

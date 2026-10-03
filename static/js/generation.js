@@ -78,7 +78,9 @@
     const started = Date.now();
     const update = () => {
       elapsed.textContent = 'Time elapsed: ' + Math.floor((Date.now() - started) / 1000)
-        + 's. You can read completed sections below while the rest is prepared.';
+        + 's. ' + (sections.children.length
+          ? 'You can read completed sections below while the rest is prepared.'
+          : 'Generating notes and questions...');
     };
     update();
     const timer = setInterval(update, 1000);
@@ -114,6 +116,8 @@
       }
     } catch (error) {
       stage.textContent = error.message;
+      elapsed.textContent = 'Stopped after ' + Math.floor((Date.now() - started) / 1000)
+        + 's. No study material was saved; please try again.';
     } finally {
       clearInterval(timer);
       if (reader) {

@@ -6,7 +6,7 @@ from django.urls import reverse
 
 from .ai_service import AIError, _generate_ollama, _parse, generate, generate_new_mcqs
 from .quiz import build_quiz
-from .topics import is_quantitative
+from .topics import is_advanced_problem, is_quantitative
 
 LEVELS = ["easy"] * 3 + ["medium"] * 3 + ["advanced"] * 4
 
@@ -328,6 +328,14 @@ class TopicModeTests(TestCase):
         for topic in ("Operating system deadlock", "French Revolution", "History of mathematics"):
             with self.subTest(topic=topic):
                 self.assertFalse(is_quantitative(topic))
+
+    def test_advanced_programming_scenario_is_not_rejected_by_verb_choice(self):
+        question = (
+            "A Java service leaks memory after repeated cache refreshes; propose a refactor "
+            "that keeps concurrent readers safe while reducing retained objects."
+        )
+        self.assertTrue(is_advanced_problem(question, quantitative=False))
+        self.assertFalse(is_advanced_problem("Define polymorphism in Java and list two examples.", quantitative=False))
 
     def test_letter_labels_cannot_be_accepted_as_mcq_answers(self):
         data = json.loads(json.dumps(FAKE))
