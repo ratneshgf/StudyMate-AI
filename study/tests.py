@@ -218,15 +218,25 @@ class StudyFlow(TestCase):
         with self.assertRaises(AIError):
             _parse('{"short_notes": {}, "exam_questions": [], "viva_questions": []}')
 
-    @override_settings(AI_PROVIDER="gemini", GEMINI_API_KEY="test-key", AI_MODEL="gemini-3.8-flash")
+    @override_settings(AI_PROVIDER="grok", XAI_API_KEY="test-key", AI_MODEL="grok-4.3")
     @patch("study.ai_service.requests.post")
-    def test_gemini_generation_uses_structured_json(self, post):
+    def test_grok_generation_uses_json_and_private_key(self, post):
         post.return_value.json.return_value = {
-            "candidates": [{"content": {"parts": [{"text": json.dumps(FAKE)}]}}]
+            "choices": [{"message": {"content": json.dumps(FAKE)}}]
         }
         result = generate("Deadlock in operating systems")
         self.assertEqual(result["topic"], "Deadlock")
-        self.assertIn("gemini-3.8-flash:generateContent", post.call_args.args[0])
+        self.assertEqual(post.call_args.args[0], "https://api.x.ai/v1/chat/completions")
+        self.assertEqual(post.call_args.kwargs["headers"]["Authorization"], "Bearer test-key")
+        self.assertEqual(post.call_args.kwargs["json"]["model"], "grok-4.3")
+        self.assertEqual(post.call_args.kwargs["json"]["response_format"], {"type": "json_object"})
+
+    @override_settings(AI_PROVIDER="grok", XAI_API_KEY="", AI_MODEL="grok-4.3")
+    @patch("study.ai_service.requests.post")
+    def test_grok_requires_key(self, post):
+        with self.assertRaisesRegex(AIError, "XAI_API_KEY"):
+            generate("Deadlock in operating systems")
+        post.assert_not_called()
 
     @override_settings(AI_PROVIDER="ollama", OLLAMA_URL="http://localhost:11434", AI_MODEL="qwen3:4b")
     @patch("study.ai_service.requests.post")

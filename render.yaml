@@ -19,8 +19,8 @@ services:
       - key: DATABASE_URL
         sync: false
       - key: AI_PROVIDER
-        value: gemini
+        value: grok
       - key: AI_MODEL
-        value: gemini-2.5-flash
-      - key: GEMINI_API_KEY
+        value: grok-4.3
+      - key: XAI_API_KEY
         sync: false
