@@ -72,7 +72,7 @@ MAX_UPLOAD_MB = 8
 DATA_UPLOAD_MAX_MEMORY_SIZE = MAX_UPLOAD_MB * 1024 * 1024
 AI_PROVIDER = os.getenv("AI_PROVIDER", "ollama").lower()
 OLLAMA_URL = os.getenv("OLLAMA_URL", "http://127.0.0.1:11434").rstrip("/")
-XAI_API_KEY = os.getenv("XAI_API_KEY", "")
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "")  # Optional legacy provider
 AI_MODEL = os.getenv("AI_MODEL", "qwen3:4b")
 # Keep GPU selection automatic unless a local machine has been benchmarked.

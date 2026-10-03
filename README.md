@@ -19,7 +19,7 @@ Enter a topic or photograph a textbook page. Get short notes, exam Q&A and viva 
 
 ## Production deployment
 
-For the Render backend and Vercel frontend, follow [the deployment guide](docs/deployment.md). Render uses Grok and Supabase; local development can keep using Ollama. The `/healthz/` endpoint checks the database.
+For the Render backend and Vercel frontend, follow [the deployment guide](docs/deployment.md). Render uses Gemini and Supabase; local development can keep using Ollama. The `/healthz/` endpoint checks the database.
 
 ## Supabase PostgreSQL
 
