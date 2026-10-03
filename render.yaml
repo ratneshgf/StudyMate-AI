@@ -19,8 +19,8 @@ services:
       - key: DATABASE_URL
         sync: false
       - key: AI_PROVIDER
-        value: gemini
+        value: groq
       - key: AI_MODEL
-        value: gemini-2.5-flash
-      - key: GEMINI_API_KEY
+        value: openai/gpt-oss-120b
+      - key: GROQ_API_KEY
         sync: false

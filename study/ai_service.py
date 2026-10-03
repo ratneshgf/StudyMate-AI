@@ -427,25 +427,37 @@ def _generate_anthropic(prompt):
     return raw
 
 
-def _generate_gemini(prompt):
-    if not settings.GEMINI_API_KEY:
-        raise AIError("AI service is not configured. Add GEMINI_API_KEY to your .env file.")
+def _generate_groq(prompt, max_tokens=6000):
+    """Request JSON from Groq within the free plan's per-minute token budget."""
+    if not settings.GROQ_API_KEY:
+        raise AIError("Groq is not configured. Add GROQ_API_KEY to the Render environment.")
     try:
-        r = requests.post(
-            f"https://generativelanguage.googleapis.com/v1beta/models/{settings.AI_MODEL}:generateContent",
-            params={"key": settings.GEMINI_API_KEY},
+        response = requests.post(
+            "https://api.groq.com/openai/v1/chat/completions",
+            headers={"Authorization": f"Bearer {settings.GROQ_API_KEY}",
+                     "Content-Type": "application/json"},
             json={
-                "contents": [{"parts": [{"text": prompt}]}],
-                "generationConfig": {"responseMimeType": "application/json", "maxOutputTokens": 12000,
-                                       "thinkingConfig": {"thinkingBudget": 0}},
+                "model": settings.AI_MODEL,
+                "messages": [{"role": "user", "content": prompt}],
+                "response_format": {"type": "json_object"},
+                "reasoning_effort": "low",
+                "max_completion_tokens": max_tokens,
+                "stream": False,
             },
-            timeout=120,
+            timeout=110,
         )
-        r.raise_for_status()
-        payload = r.json()
-        raw = payload["candidates"][0]["content"]["parts"][0]["text"]
-    except (requests.RequestException, KeyError, IndexError, ValueError, TypeError):
-        raise AIError("Gemini is currently unavailable or its free quota was reached. Please try again later.")
+        if response.status_code == 429:
+            raise AIError("Groq free-plan limit reached. Please try again in a minute.")
+        response.raise_for_status()
+        raw = response.json()["choices"][0]["message"]["content"]
+    except requests.Timeout:
+        raise AIError("Groq took too long to respond. Please try again.") from None
+    except requests.RequestException:
+        raise AIError("Groq is unavailable. Check the API key and Render logs.") from None
+    except (KeyError, IndexError, TypeError, ValueError):
+        raise AIOutputError("Groq returned an incomplete response.") from None
+    if not isinstance(raw, str) or not raw.strip():
+        raise AIOutputError("Groq returned an empty response.")
     return raw
 
 
@@ -494,12 +506,12 @@ def generate(text, mode=""):
     quantitative = is_quantitative(text)
     prompt = PROMPT.format(text=text, mode=MODES.get(mode, ""),
                            guidance=QUANT_GUIDANCE if quantitative else THEORY_GUIDANCE)
-    if settings.AI_PROVIDER == "gemini":
-        raw = _generate_gemini(prompt)
+    if settings.AI_PROVIDER == "groq":
+        raw = _generate_groq(prompt)
     elif settings.AI_PROVIDER == "anthropic":
         raw = _generate_anthropic(prompt)
     else:
-        raise AIError("Unsupported AI_PROVIDER. Use 'ollama', 'gemini', or 'anthropic'.")
+        raise AIError("Unsupported AI_PROVIDER. Use 'ollama', 'groq', or 'anthropic'.")
     return _parse(raw, quantitative=quantitative)
 
 
@@ -519,8 +531,8 @@ def generate_new_mcqs(text, excluded=()):
               "each item has difficulty, question, options (four unique choices), "
               "correct_index (0-3) and explanation. Do not repeat: "
               + "; ".join(list(excluded)[:20]) + "\nTopic: " + source + "\n" + guidance)
-    if settings.AI_PROVIDER == "gemini":
-        raw = _generate_gemini(prompt)
+    if settings.AI_PROVIDER == "groq":
+        raw = _generate_groq(prompt, max_tokens=3000)
     elif settings.AI_PROVIDER == "anthropic":
         raw = _generate_anthropic(prompt)
     else:

@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 from django.test import SimpleTestCase, TestCase, TransactionTestCase, override_settings
 from django.urls import reverse
 
-from .ai_service import AIError, _generate_ollama, _parse, generate
+from .ai_service import AIError, _generate_ollama, _parse, generate, generate_new_mcqs
 from .quiz import build_quiz
 from .topics import is_quantitative
 
@@ -218,15 +218,39 @@ class StudyFlow(TestCase):
         with self.assertRaises(AIError):
             _parse('{"short_notes": {}, "exam_questions": [], "viva_questions": []}')
 
-    @override_settings(AI_PROVIDER="gemini", GEMINI_API_KEY="test-key", AI_MODEL="gemini-3.8-flash")
+    @override_settings(AI_PROVIDER="groq", GROQ_API_KEY="test-key", AI_MODEL="openai/gpt-oss-120b")
     @patch("study.ai_service.requests.post")
-    def test_gemini_generation_uses_structured_json(self, post):
+    def test_groq_generation_and_new_mcqs_use_json_mode(self, post):
+        post.return_value.status_code = 200
         post.return_value.json.return_value = {
-            "candidates": [{"content": {"parts": [{"text": json.dumps(FAKE)}]}}]
+            "choices": [{"message": {"content": json.dumps(FAKE)}}]
         }
         result = generate("Deadlock in operating systems")
         self.assertEqual(result["topic"], "Deadlock")
-        self.assertIn("gemini-3.8-flash:generateContent", post.call_args.args[0])
+        self.assertEqual(post.call_args.args[0], "https://api.groq.com/openai/v1/chat/completions")
+        self.assertEqual(post.call_args.kwargs["headers"]["Authorization"], "Bearer test-key")
+        self.assertEqual(post.call_args.kwargs["json"]["model"], "openai/gpt-oss-120b")
+        self.assertEqual(post.call_args.kwargs["json"]["response_format"], {"type": "json_object"})
+        self.assertEqual(post.call_args.kwargs["json"]["max_completion_tokens"], 6000)
+        post.return_value.json.return_value = {
+            "choices": [{"message": {"content": json.dumps({"mcq_questions": FAKE["mcq_questions"]})}}]
+        }
+        self.assertEqual(len(generate_new_mcqs("Deadlock in operating systems")), 10)
+        self.assertEqual(post.call_args.kwargs["json"]["max_completion_tokens"], 3000)
+
+    @override_settings(AI_PROVIDER="groq", GROQ_API_KEY="", AI_MODEL="openai/gpt-oss-120b")
+    @patch("study.ai_service.requests.post")
+    def test_groq_requires_key(self, post):
+        with self.assertRaisesRegex(AIError, "GROQ_API_KEY"):
+            generate("Deadlock in operating systems")
+        post.assert_not_called()
+
+    @override_settings(AI_PROVIDER="groq", GROQ_API_KEY="test-key", AI_MODEL="openai/gpt-oss-120b")
+    @patch("study.ai_service.requests.post")
+    def test_groq_free_limit_has_actionable_error(self, post):
+        post.return_value.status_code = 429
+        with self.assertRaisesRegex(AIError, "free-plan limit"):
+            generate("Deadlock in operating systems")
 
     @override_settings(AI_PROVIDER="ollama", OLLAMA_URL="http://localhost:11434", AI_MODEL="qwen3:4b")
     @patch("study.ai_service.requests.post")
