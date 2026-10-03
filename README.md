@@ -1,6 +1,8 @@
 # StudyMate AI
 
-Enter a topic or photograph a textbook page. Get short notes, exam Q&A and viva Q&A. Django + OpenCV/Tesseract + local Ollama AI.
+**Live demo:** [study-mate-ai-cdtt.vercel.app](https://study-mate-ai-cdtt.vercel.app/)
+
+Enter a topic or photograph a textbook page to get notes, related concepts, exam and viva questions, and an interactive MCQ test. The live app uses Django, Groq, Supabase PostgreSQL, and OpenCV/Tesseract; local development can use Ollama.
 
 ## Setup
 1. Install Tesseract OCR (Windows: UB Mannheim build, then set `TESSERACT_CMD` in `.env`; Ubuntu: `sudo apt install tesseract-ocr`; macOS: `brew install tesseract`).
