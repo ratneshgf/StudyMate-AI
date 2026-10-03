@@ -329,6 +329,16 @@ class TopicModeTests(TestCase):
             with self.subTest(topic=topic):
                 self.assertFalse(is_quantitative(topic))
 
+    def test_cloud_theory_accepts_applied_question_without_keyword_cues(self):
+        data = json.loads(json.dumps(FAKE))
+        data["exam_questions"][6]["question"] = (
+            "A Java cache under heavy load returns stale records after a worker mutates "
+            "shared state, despite passing isolated unit tests; provide a correction "
+            "with concurrency guarantees."
+        )
+        self.assertFalse(is_advanced_problem(data["exam_questions"][6]["question"], False))
+        self.assertEqual(len(_parse(json.dumps(data))["exam_questions"]), 10)
+
     def test_advanced_programming_scenario_is_not_rejected_by_verb_choice(self):
         question = (
             "A Java service leaks memory after repeated cache refreshes; propose a refactor "

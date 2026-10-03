@@ -157,8 +157,8 @@ def _validate_questions(result, quantitative):
             all_questions.add(question)
             if quantitative and not has_calculation(item["question"]):
                 raise AIOutputError("A numerical topic needs calculation questions.")
-            if item["difficulty"] == "advanced" and not is_advanced_problem(item["question"], quantitative):
-                raise AIOutputError("The advanced questions are too basic.")
+            if quantitative and item["difficulty"] == "advanced" and not is_advanced_problem(item["question"], True):
+                raise AIOutputError("The advanced numerical questions are too basic.")
 
 
 def _parse(raw, quantitative=False):
@@ -396,7 +396,7 @@ def _collect_local_questions(source, section, guidance, style, quantitative, exc
                         continue
                     if quantitative and not has_calculation(item["question"]):
                         continue
-                    if level == "advanced" and not is_advanced_problem(item["question"], quantitative):
+                    if quantitative and level == "advanced" and not is_advanced_problem(item["question"], True):
                         continue
                     seen.add(identity)
                     collected[level].append(item)
@@ -549,6 +549,6 @@ def generate_new_mcqs(text, excluded=()):
             raise AIOutputError("The AI repeated a previous test question.")
         if quantitative and not has_calculation(item["question"]):
             raise AIOutputError("A numerical topic needs numerical MCQs.")
-        if item["difficulty"] == "advanced" and not is_advanced_problem(item["question"], quantitative):
-            raise AIOutputError("The advanced MCQs are too basic.")
+        if quantitative and item["difficulty"] == "advanced" and not is_advanced_problem(item["question"], True):
+            raise AIOutputError("The advanced numerical MCQs are too basic.")
     return items[:10]
